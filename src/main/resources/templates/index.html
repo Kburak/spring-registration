@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Welcome to KBE Customer Management System Register</title>
+    <title>Welcome to KBE Customer Management System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
 </head>
 <body>
 <!-- Create navigation bar   -->
@@ -18,10 +18,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                 <a class="nav-link" href="#">Features</a>
                 <a class="nav-link" href="#">Pricing</a>
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"> Log Out </a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -29,45 +35,37 @@
 
 <br>
 <br>
-<!-- Create Registration form bar   -->
+
 <div class="container">
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <!--success message-->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">
-                    You have successfully registered. Well Done!
-                </div>
-            </div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <h1>Customers</h1>
+            Welcome <span sec:authentication="principal.username"> User </span>
+            <a th:href="@{/registration}" class="btn btn-primary btn-sm mb-3"> Register </a>
 
-            <h1>Registration</h1>
-            <form th:action="@{/registration}" method="POST" th:object="${user}">
-
-                <div class="form-group">
-                    <label for="firstName" class="control-label">First Name</label>
-                    <input id="firstName" type="text" class="form-control" th:field="*{firstName}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="lastName" class="control-label">Last Name</label>
-                    <input id="lastName" type="text" class="form-control" th:field="*{lastName}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="email" class="control-label">Email</label>
-                    <input id="email" type="text" class="form-control" th:field="*{email}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="control-label">Password</label>
-                    <input id="password" type="password" class="form-control" th:field="*{password}" required
-                           autofocus="autofocus">
-                </div>
-
-                <button type="submit" class="btn btn-success"> Register</button>
-                <span>Already Registered?<a href="/" th:href="@{/login}">Login Here</a></span>
-
-            </form>
+            <table class="table table-striped table-responsive-md table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email Address</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${listUsers}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td>
+                        <a th:href="@{/showFormForUpdate/{id}(id=${user.id})}" class="btn btn-primary">Update</a>
+                        <a th:href="@{/deleteCustomer/{id}(id=${user.id})}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

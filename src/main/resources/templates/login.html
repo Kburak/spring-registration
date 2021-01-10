@@ -2,10 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Welcome to KBE Customer Management System Register</title>
+    <title>Welcome to KBE Customer Management System Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
 </head>
 <body>
 <!-- Create navigation bar   -->
@@ -29,45 +28,50 @@
 
 <br>
 <br>
-<!-- Create Registration form bar   -->
+
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <!--success message-->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">
-                    You have successfully registered. Well Done!
-                </div>
-            </div>
-
-            <h1>Registration</h1>
-            <form th:action="@{/registration}" method="POST" th:object="${user}">
-
-                <div class="form-group">
-                    <label for="firstName" class="control-label">First Name</label>
-                    <input id="firstName" type="text" class="form-control" th:field="*{firstName}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="lastName" class="control-label">Last Name</label>
-                    <input id="lastName" type="text" class="form-control" th:field="*{lastName}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="email" class="control-label">Email</label>
-                    <input id="email" type="text" class="form-control" th:field="*{email}" required
-                           autofocus="autofocus">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="control-label">Password</label>
-                    <input id="password" type="password" class="form-control" th:field="*{password}" required
-                           autofocus="autofocus">
+            <h1>User Login</h1>
+            <form th:action="@{/login}" method="POST">
+                <!-- Error message  -->
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        Invalid Username or password!
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-success"> Register</button>
-                <span>Already Registered?<a href="/" th:href="@{/login}">Login Here</a></span>
+                <!-- Logout Message     -->
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">
+                        You have successfully logged out!
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label for="username"> Username or Email</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Username or email" autofocus="autofocus">
+                </div>
+
+                <div class="form-group">
+                    <label for="password"> Password </label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Password" autofocus="autofocus">
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" name="login-submit" id="login-submit"
+                                class="form-control btn btn-primary">
+                            Log In
+                        </button>
+                    </div>
+                </div>
             </form>
+            <div class="form-group">
+                <span>New User? <a href="/" th:href="@{/registration}"> Register Here</a></span>
+            </div>
         </div>
     </div>
 </div>
