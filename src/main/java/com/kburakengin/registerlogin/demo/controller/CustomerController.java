@@ -18,6 +18,8 @@ import javax.validation.Valid;
 public class CustomerController {
 
     private static final String REDIRECT_HOME = "redirect:/";
+    private static final String REDIRECT_CUSTOMER_LIST = "redirect:/customerList";
+
 
     private CustomerService customerService;
 
@@ -26,7 +28,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/new-customer")
+    @GetMapping("/newCustomer")
     public String showNewCustomerForm(Model model) {
         // create model attribute
         Customer customer = new Customer();
@@ -34,7 +36,7 @@ public class CustomerController {
         return "new_customer";
     }
 
-    @PostMapping("/save-customer")
+    @PostMapping("/saveCustomer")
     public String saveCustomer(@Valid @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "new_customer";
@@ -43,18 +45,18 @@ public class CustomerController {
             //save customer to db
             this.customerService.saveCustomer(customer);
             log.info("Customer Created");
-            return "customer-list";
+            return "redirect:/customerList";
         }
     }
 
-    @GetMapping("/customer-list")
+    @GetMapping("/customerList")
     public String getCustomerList(Model model) {
         model.addAttribute("listCustomers", customerService.getAllCustomers());
         return "customer_list";
     }
 
-    @GetMapping("/update-customer-form/{id}")
-    public String showUpdateCustomerForm(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping("/showUpdateCustomerForm/{id}")
+    public String showUpdateCustomerForm(@PathVariable(value = "id") long id, Model model) {
 
         Customer customer = this.customerService.getCustomerById(id);
 
@@ -63,8 +65,8 @@ public class CustomerController {
         return "update_customer";
     }
 
-    @PostMapping("/update-customer/{id}")
-    public String updateCustomer(@PathVariable(value = "id") Long id, @ModelAttribute("customer") @Valid Customer customer,
+    @PostMapping("/updateCustomer/{id}")
+    public String updateCustomer(@PathVariable(value = "id") long id, @ModelAttribute("customer") @Valid Customer customer,
                                  BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()) {
@@ -74,12 +76,12 @@ public class CustomerController {
         }
         this.customerService.updateCustomer(customer);
         log.info("Updated Successfully");
-        return "customer_list";
+        return REDIRECT_CUSTOMER_LIST.concat("?updateSuccess") ;
     }
 
-    @GetMapping("/delete_customer/{id}")
-    public String deleteCustomer(@PathVariable(value = "id") Long id) {
+    @GetMapping("/deleteCustomer/{id}")
+    public String deleteCustomer(@PathVariable(value = "id") long id) {
         this.customerService.deleteCustomer(id);
-        return REDIRECT_HOME;
+        return REDIRECT_CUSTOMER_LIST.concat("?deleteSuccess");
     }
 }

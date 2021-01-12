@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Customer getCustomerById(Long id) throws RuntimeException{
+    public Customer getCustomerById(long id) throws RuntimeException{
 
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
 
@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void deleteCustomer(Long id) {
+    public void deleteCustomer(long id) {
         this.customerRepository.deleteById(id);
     }
 }
